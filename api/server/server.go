@@ -132,3 +132,77 @@ func SearchTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// Edit an specific task by id
+func EditTask(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	requestBody, erro := ioutil.ReadAll(r.Body)
+	if erro != nil {
+		w.Write([]byte("Fail on read body of the request."))
+		return
+	}
+
+	var task task
+	if erro = json.Unmarshal(requestBody, &task); erro != nil {
+		w.Write([]byte("Erro to convert task to struct."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database,"))
+	}
+	defer db.Close()
+
+	statement, erro := db.Prepare("update dailytasks set dataAndHour = ?, title = ?, description = ?, isFinished = ? where id = ?")
+	if erro != nil {
+		w.Write([]byte("Error when execute query to update an specific task."))
+		return
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished, ID); erro != nil {
+		w.Write([]byte("Error when update an task!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
+
+// Delete an specific task by id
+func DeleteTask(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database,"))
+	}
+	defer db.Close()
+
+	statement, erro := db.Prepare("delete from dailytasks where id = ?")
+	if erro != nil {
+		w.Write([]byte("Error when execute query to delete an specific task."))
+		return
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(ID); erro != nil {
+		w.Write([]byte("Erro when delete an task!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
