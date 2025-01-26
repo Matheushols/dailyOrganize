@@ -1,13 +1,12 @@
 package server
 
 import (
+	"dailyorganize/databaseaplication"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
-
-	"github.com/Matheushols/dailyorganize/database/database"
 )
 
 type task struct {
@@ -32,10 +31,29 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db, erro := database.Conect()
+	db, erro := databaseaplication.Conect()
 	if erro != nil {
 		w.Write([]byte("Error to conect on database"))
 	}
 
-	fmt.Print(db)
+	statement, erro := db.Prepare("insert into dailytasks (dataAndHour, title, description, isFinished) values (?, ?, ?, ?)")
+	if erro != nil {
+		w.Write([]byte("Error to create statement"))
+		return
+	}
+	defer statement.Close()
+
+	insert, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished)
+	if erro != nil {
+		w.Write([]byte("Error to execute statement."))
+		return
+	}
+
+	idInserted, erro := insert.LastInsertId()
+	if erro != nil {
+		w.Write([]byte("Error to get the id included."))
+		return
+	}
+
+	w.Write([]byte(fmt.Sprintf("Task sucesseful created! Id: %d", idInserted)))
 }

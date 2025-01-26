@@ -1,10 +1,11 @@
 package main
 
 import (
-	"api/server"
 	"fmt"
 	"log"
 	"net/http"
+
+	"dailyorganize/api/server"
 
 	"github.com/gorilla/mux"
 )
