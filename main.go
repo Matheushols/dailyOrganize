@@ -15,8 +15,8 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/tasks", server.CreateTask).Methods(http.MethodPost)
-	//router.HandleFunc("/tasks", server.ListTask).Methods(http.MethodGet)
-	//router.HandleFunc("/tasks/{id}", server.SearchTask).Methods(http.MethodGet)
+	router.HandleFunc("/tasks", server.ListTask).Methods(http.MethodGet)
+	router.HandleFunc("/tasks/{id}", server.SearchTask).Methods(http.MethodGet)
 	//router.HandleFunc("/tasks/{id}", server.EditTask).Methods(http.MethodPut)
 	//router.HandleFunc("/tasks/{id}", server.DeleteTask).Methods(http.MethodDelete)
 

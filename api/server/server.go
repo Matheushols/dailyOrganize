@@ -6,7 +6,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 type task struct {
@@ -56,4 +59,76 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write([]byte(fmt.Sprintf("Task sucesseful created! Id: %d", idInserted)))
+}
+
+// List the tasks
+func ListTask(w http.ResponseWriter, r *http.Request) {
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+	defer db.Close()
+
+	lines, erro := db.Query("select * from dailytasks")
+	if erro != nil {
+		w.Write([]byte("Error to execute query."))
+		return
+	}
+	defer lines.Close()
+
+	var tasks []task
+	for lines.Next() {
+		var task task
+
+		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished); erro != nil {
+			w.Write([]byte("Error to get tasks."))
+			return
+		}
+
+		tasks = append(tasks, task)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(tasks); erro != nil {
+		w.Write([]byte("Error to convert tasks in to JSON."))
+		return
+	}
+}
+
+// Search an specific task by id
+func SearchTask(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+	defer db.Close()
+
+	lines, erro := db.Query("select * from dailytasks where id = ?", ID)
+	if erro != nil {
+		w.Write([]byte("Error when execute query to get specific task."))
+		return
+	}
+	defer lines.Close()
+
+	var task task
+	if lines.Next() {
+		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished); erro != nil {
+			w.Write([]byte("Error to get tasks."))
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(task); erro != nil {
+		w.Write([]byte("Error to convert tasks in to JSON."))
+		return
+	}
 }
