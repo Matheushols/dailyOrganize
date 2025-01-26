@@ -1,25 +1,23 @@
-package main
+package database
 
 import (
 	"database/sql"
-	"fmt"
-	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/go-sql-driver/mysql" // Driver to conection
 )
 
-func main() {
+// Conect open the conection with database
+func Conect() (*sql.DB, error) {
 	stringConnectioUrl := "root:12345678@/dailyorganize?charset=utf8&parseTime=True&loc=Local"
+
 	db, erro := sql.Open("mysql", stringConnectioUrl)
 	if erro != nil {
-		log.Fatal(erro)
+		return nil, erro
 	}
-	defer db.Close()
 
 	if erro = db.Ping(); erro != nil {
-		log.Fatal(erro)
+		return nil, erro
 	}
 
-	fmt.Println("Conected on data base.")
-
+	return db, nil
 }
