@@ -253,3 +253,37 @@ func CreateTaskType(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf("Task Type sucesseful created! Id: %d", idInserted)))
 }
+
+// List the tasks types
+func ListTaskType(w http.ResponseWriter, r *http.Request) {
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+	defer db.Close()
+
+	lines, erro := db.Query("select * from type")
+	if erro != nil {
+		w.Write([]byte("Error to execute query."))
+		return
+	}
+	defer lines.Close()
+
+	var tasksTypes []taskType
+	for lines.Next() {
+		var taskType taskType
+
+		if erro := lines.Scan(&taskType.ID, &taskType.Description); erro != nil {
+			w.Write([]byte("Error to get tasks."))
+			return
+		}
+
+		tasksTypes = append(tasksTypes, taskType)
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(tasksTypes); erro != nil {
+		w.Write([]byte("Error to convert tasks in to JSON."))
+		return
+	}
+}
