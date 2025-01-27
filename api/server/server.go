@@ -287,3 +287,41 @@ func ListTaskType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+// Search an specific task type by id
+func SearchTaskType(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+	defer db.Close()
+
+	lines, erro := db.Query("select * from type where id = ?", ID)
+	if erro != nil {
+		w.Write([]byte("Error when execute query to get specific task."))
+		return
+	}
+	defer lines.Close()
+
+	var taskType taskType
+	if lines.Next() {
+		if erro := lines.Scan(&taskType.ID, &taskType.Description); erro != nil {
+			w.Write([]byte("Error to get tasks type."))
+			return
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	if erro := json.NewEncoder(w).Encode(taskType); erro != nil {
+		w.Write([]byte("Error to convert tasks in to JSON."))
+		return
+	}
+}
