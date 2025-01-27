@@ -20,6 +20,11 @@ type task struct {
 	IsFinished  bool      `json: "isFinished"`
 }
 
+type taskType struct {
+	ID          uint32 `json: "id"`
+	Description string `json: "description"`
+}
+
 // Create a task
 func CreateTask(w http.ResponseWriter, r *http.Request) {
 	requestBody, erro := ioutil.ReadAll(r.Body)
@@ -205,4 +210,46 @@ func DeleteTask(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+// Create a task type
+func CreateTaskType(w http.ResponseWriter, r *http.Request) {
+	requestBody, erro := ioutil.ReadAll(r.Body)
+	if erro != nil {
+		w.Write([]byte("Fail on read body of the request."))
+		return
+	}
+
+	var taskType taskType
+	if erro = json.Unmarshal(requestBody, &taskType); erro != nil {
+		w.Write([]byte("Erro to convert task to struct."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+
+	statement, erro := db.Prepare("insert into type (description) values (?)")
+	if erro != nil {
+		w.Write([]byte("Error to create statement"))
+		return
+	}
+	defer statement.Close()
+
+	insert, erro := statement.Exec(taskType.Description)
+	if erro != nil {
+		w.Write([]byte("Error to execute statement."))
+		return
+	}
+
+	idInserted, erro := insert.LastInsertId()
+	if erro != nil {
+		w.Write([]byte("Error to get the id included."))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(fmt.Sprintf("Task Type sucesseful created! Id: %d", idInserted)))
 }
