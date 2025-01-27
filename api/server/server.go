@@ -369,3 +369,34 @@ func EditTaskType(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 
 }
+
+// Delete an specific task type by id
+func DeleteTaskType(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database,"))
+	}
+	defer db.Close()
+
+	statement, erro := db.Prepare("delete from type where id = ?")
+	if erro != nil {
+		w.Write([]byte("Error when execute query to delete an specific task type."))
+		return
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(ID); erro != nil {
+		w.Write([]byte("Erro when delete an task!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}
