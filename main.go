@@ -23,7 +23,7 @@ func main() {
 	router.HandleFunc("/tasksType", server.CreateTaskType).Methods(http.MethodPost)
 	router.HandleFunc("/tasksType", server.ListTaskType).Methods(http.MethodGet)
 	router.HandleFunc("/tasksType/{id}", server.SearchTaskType).Methods(http.MethodGet)
-	//router.HandleFunc("/tasks/type"/{id}", server.EditTaskType).Methods(http.MethodPut)
+	router.HandleFunc("/tasksType/{id}", server.EditTaskType).Methods(http.MethodPut)
 	//router.HandleFunc("/tasks/type"/{id}", server.DeleteTaskType).Methods(http.MethodDelete)
 
 	fmt.Println("Conected on 5000 port.")

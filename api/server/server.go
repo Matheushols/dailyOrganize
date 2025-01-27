@@ -306,7 +306,7 @@ func SearchTaskType(w http.ResponseWriter, r *http.Request) {
 
 	lines, erro := db.Query("select * from type where id = ?", ID)
 	if erro != nil {
-		w.Write([]byte("Error when execute query to get specific task."))
+		w.Write([]byte("Error when execute query to get specific task type."))
 		return
 	}
 	defer lines.Close()
@@ -324,4 +324,48 @@ func SearchTaskType(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Error to convert tasks in to JSON."))
 		return
 	}
+}
+
+// Edit an specific task type by id
+func EditTaskType(w http.ResponseWriter, r *http.Request) {
+	parameters := mux.Vars(r)
+
+	ID, erro := strconv.ParseUint(parameters["id"], 10, 32)
+	if erro != nil {
+		w.Write([]byte("Error to converte parameter to a integer number."))
+		return
+	}
+
+	requestBody, erro := ioutil.ReadAll(r.Body)
+	if erro != nil {
+		w.Write([]byte("Fail on read body of the request."))
+		return
+	}
+
+	var taskType taskType
+	if erro = json.Unmarshal(requestBody, &taskType); erro != nil {
+		w.Write([]byte("Erro to convert task type to struct."))
+		return
+	}
+
+	db, erro := databaseaplication.Conect()
+	if erro != nil {
+		w.Write([]byte("Error to conect on database"))
+	}
+	defer db.Close()
+
+	statement, erro := db.Prepare("update type set description = ? where id = ?")
+	if erro != nil {
+		w.Write([]byte("Error when execute query to update an specific task type."))
+		return
+	}
+	defer statement.Close()
+
+	if _, erro := statement.Exec(taskType.Description, ID); erro != nil {
+		w.Write([]byte("Error when update an task type!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+
 }
