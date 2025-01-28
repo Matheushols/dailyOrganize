@@ -7,6 +7,7 @@ import (
 
 	"dailyorganize/api/server"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
@@ -26,6 +27,13 @@ func main() {
 	router.HandleFunc("/tasksType/{id}", server.EditTaskType).Methods(http.MethodPut)
 	router.HandleFunc("/tasksType/{id}", server.DeleteTaskType).Methods(http.MethodDelete)
 
+	// Adiciona o middleware CORS para permitir requisições de http://localhost:3000
+	corsAllowed := handlers.CORS(
+		handlers.AllowedOrigins([]string{"http://localhost:3000"}),         // Permite requisições da origem http://localhost:3000
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}),  // Permite métodos específicos
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}), // Permite cabeçalhos específicos
+	)
+
 	fmt.Println("Conected on 5000 port.")
-	log.Fatal(http.ListenAndServe(":5000", router))
+	log.Fatal(http.ListenAndServe(":5000", corsAllowed(router)))
 }

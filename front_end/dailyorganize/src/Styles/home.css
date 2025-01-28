@@ -1,0 +1,23 @@
+/* Estilo para o container de tarefas */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Estilo para cada card de tarefa */
+.task-card {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 8px;
+  width: 80%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para o título das tarefas */
+.task-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
