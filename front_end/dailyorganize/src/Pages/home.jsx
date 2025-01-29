@@ -28,20 +28,11 @@ const Home = () => {
     <div style={{ textAlign: "center", padding: "20px" }}>
       <h1>Daily Tasks</h1>
       <p>Organize your tasks in a simple way with daily organize.</p>
-      <button 
-        style={{
-          padding: "10px 20px",
-          fontSize: "16px",
-          backgroundColor: "#6200ea",
-          color: "#fff",
-          border: "none",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-        onClick={() => alert("Você clicou no botão!")}
-      >
+      <div className="container-add-task">
+      <button className="button-add-task" onClick={() => alert("Você clicou no botão!")}>
         Add Task
       </button>
+      </div>
 
       <div className="container">
         {loading ? (
@@ -52,20 +43,9 @@ const Home = () => {
           users.map((task) => (
             <div key={task.ID} className="task-card">
               <h2 className="task-title">
-                {task.Title.length > 20 ? `${task.Title.substring(0, 20)}...` : task.Title}
+                {task.Title.length > 20 ? `${task.Title.substring(0, 500)}...` : task.Title}
               </h2>
-              <button
-                style={{
-                  padding: "3px 10px",
-                  fontSize: "15px",
-                  backgroundColor: "#6200ea",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: "10px",
-                  cursor: "pointer",
-                }}
-                onClick={() => alert(`Editando a tarefa: ${task.Title}`)}
-              >
+              <button className="button-edit" onClick={() => alert(`Editando a tarefa: ${task.Title}`)}>
                 Edit the task
               </button>
             </div>
