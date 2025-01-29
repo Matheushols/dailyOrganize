@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/home.css";
-import EditTask from "../Components/editTask"; // Importando o modal
+import EditTask from "../Components/editTask";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null); // Estado para armazenar a tarefa selecionada
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
