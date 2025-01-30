@@ -8,7 +8,10 @@ const EditTask = ({ isOpen, onClose }) => {
     <div className="overlay">
       <div className="edit-task">
         <p>Editing the task</p>
+        <div className="editing-task-button">
+        <button onClick={onClose} className="save-button">Save</button>
         <button onClick={onClose} className="close-button">Close</button>
+        </div>
       </div>
     </div>
   );
