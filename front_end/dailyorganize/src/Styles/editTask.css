@@ -16,7 +16,10 @@
     background-color: #D3D3D3;
     padding: 20px;
     border-radius: 8px;
+    width: 50vw;
+    height: 50vh;
     text-align: center;
+    flex-direction: column;
   }
   
   /* Botão de fechar */
