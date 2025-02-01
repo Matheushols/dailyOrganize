@@ -2,26 +2,29 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../Styles/home.css";
 import EditTask from "../Components/editTask";
+import CreateTask from "../Components/createTask";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
+  const [isCreatingTaskOpen, setIsCreatingTaskOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/tasks");
-        setUsers(response.data);
-      } catch (err) {
-        setError("Erro ao carregar os dados da API");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:5000/tasks");
+      setUsers(response.data);
+    } catch (err) {
+      setError("Erro ao carregar os dados da API");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
@@ -30,7 +33,7 @@ const Home = () => {
       <h1>Daily Tasks</h1>
       <p>Organize your tasks in a simple way with daily organize.</p>
       <div className="container-add-task">
-        <button className="button-add-task" onClick={() => alert("Você clicou no botão!")}>
+        <button className="button-add-task" onClick={() => setIsCreatingTaskOpen(true)}>
           Add Task
         </button>
       </div>
@@ -59,7 +62,8 @@ const Home = () => {
           ))
         )}
       </div>
-      <EditTask isOpen={isEditTaskOpen} onClose={() => setIsEditTaskOpen(false)} task={selectedTask} />
+      <EditTask isOpen={isEditTaskOpen} onClose={() => setIsEditTaskOpen(false)} task={selectedTask} refreshTasks={fetchUsers} />
+      <CreateTask isOpen={isCreatingTaskOpen} onClose={() => setIsCreatingTaskOpen(false)} refreshTasks={fetchUsers} />
     </div>
   );
 };
