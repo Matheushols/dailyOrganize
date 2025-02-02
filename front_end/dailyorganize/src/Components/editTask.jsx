@@ -1,9 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/editTask.css";
 
 const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (task && !task.isFinished) {
+      setTitle(task.Title || "");
+      setDescription(task.Description || "");
+    }
+  }, [task]);
+
   if (!isOpen || !task) return null;
+
+  const handleSave = async () => {
+    try {
+      await axios.put(`http://localhost:5000/tasks/${task.ID}`, {
+        title,
+        description,
+        dataAndHour: task.DataAndHour,
+        isFinished: task.isFinished,
+      });
+      onClose();
+      refreshTasks();
+    } catch (error) {
+      console.error("Error updating task:", error);
+      alert("Failed to update the task.");
+    }
+  };
 
   const handleDelete = async () => {
     try {
@@ -19,9 +45,24 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
   return (
     <div className="overlay">
       <div className="edit-task">
-        <p>Editing the task: {task.Title}</p>
+        <h3>Editing the task: {task.Title}</h3>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          disabled={task.isFinished}
+          placeholder="Task title"
+        />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          disabled={task.isFinished}
+          placeholder="Task description"
+        ></textarea>
         <div className="editing-task-button">
-          <button onClick={onClose} className="save-button">Save</button>
+          <button onClick={handleSave} className="save-button" disabled={task.isFinished}>
+            Save
+          </button>
           <button onClick={handleDelete} className="delete-button">Delete</button>
           <button onClick={onClose} className="close-button">Close</button>
         </div>
