@@ -47,8 +47,13 @@ const Home = () => {
           users.map((task) => (
             <div key={task.ID} className="task-card">
               <h2 className="task-title">
-                {task.Title.length > 20 ? `${task.Title.substring(0, 600)}...` : task.Title}
+                {task.Title.length > 20 ? `${task.Title.substring(0, 700)}` : task.Title}
               </h2>
+              <div>
+                <h3 className="task-type">
+                {`${task.Type}`}
+                </h3>
+              </div>
               <button
                 className="button-edit"
                 onClick={() => {

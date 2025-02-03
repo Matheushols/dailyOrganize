@@ -46,3 +46,13 @@
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+.task-type {
+  padding: 3px 10px;
+  font-size: 15px;
+  background-color: #ffb71c;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}

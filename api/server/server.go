@@ -18,6 +18,7 @@ type task struct {
 	Title       string    `json: "title"`
 	Description string    `json: "description"`
 	IsFinished  bool      `json: "isFinished"`
+	Type        string    `json: "type"`
 }
 
 type taskType struct {
@@ -44,14 +45,14 @@ func CreateTask(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Error to conect on database"))
 	}
 
-	statement, erro := db.Prepare("insert into dailytasks (dataAndHour, title, description, isFinished) values (?, ?, ?, ?)")
+	statement, erro := db.Prepare("insert into dailytasks (dataAndHour, title, description, isFinished, type) values (?, ?, ?, ?, ?)")
 	if erro != nil {
 		w.Write([]byte("Error to create statement"))
 		return
 	}
 	defer statement.Close()
 
-	insert, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished)
+	insert, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished, task.Type)
 	if erro != nil {
 		w.Write([]byte("Error to execute statement."))
 		return
@@ -85,7 +86,7 @@ func ListTask(w http.ResponseWriter, r *http.Request) {
 	for lines.Next() {
 		var task task
 
-		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished); erro != nil {
+		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished, &task.Type); erro != nil {
 			w.Write([]byte("Error to get tasks."))
 			return
 		}
@@ -125,7 +126,7 @@ func SearchTask(w http.ResponseWriter, r *http.Request) {
 
 	var task task
 	if lines.Next() {
-		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished); erro != nil {
+		if erro := lines.Scan(&task.ID, &task.DataAndHour, &task.Title, &task.Description, &task.IsFinished, &task.Type); erro != nil {
 			w.Write([]byte("Error to get tasks."))
 			return
 		}
@@ -166,14 +167,14 @@ func EditTask(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	statement, erro := db.Prepare("update dailytasks set dataAndHour = ?, title = ?, description = ?, isFinished = ? where id = ?")
+	statement, erro := db.Prepare("update dailytasks set dataAndHour = ?, title = ?, description = ?, isFinished = ?, type = ? where id = ?")
 	if erro != nil {
 		w.Write([]byte("Error when execute query to update an specific task."))
 		return
 	}
 	defer statement.Close()
 
-	if _, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished, ID); erro != nil {
+	if _, erro := statement.Exec(task.DataAndHour, task.Title, task.Description, task.IsFinished, task.Type, ID); erro != nil {
 		w.Write([]byte("Error when update an task!"))
 		return
 	}
