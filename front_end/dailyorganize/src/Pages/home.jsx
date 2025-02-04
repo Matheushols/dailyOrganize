@@ -49,11 +49,11 @@ const Home = () => {
               <h2 className="task-title">
                 {task.Title.length > 20 ? `${task.Title.substring(0, 700)}` : task.Title}
               </h2>
-              <div>
+              <div className="grouped-type-edit">
                 <h3 className="task-type">
                 {`${task.Type}`}
                 </h3>
-              </div>
+              
               <button
                 className="button-edit"
                 onClick={() => {
@@ -63,6 +63,7 @@ const Home = () => {
               >
                 Edit the task
               </button>
+              </div>
             </div>
           ))
         )}

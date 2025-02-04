@@ -5,11 +5,13 @@ import "../Styles/editTask.css";
 const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [type, setType] = useState("");
 
   useEffect(() => {
     if (task && !task.isFinished) {
       setTitle(task.Title || "");
       setDescription(task.Description || "");
+      setType(task.type || "");
     }
   }, [task]);
 
@@ -22,6 +24,7 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
         description,
         dataAndHour: task.DataAndHour,
         isFinished: task.isFinished,
+        type,
       });
       onClose();
       refreshTasks();
@@ -52,6 +55,12 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
           onChange={(e) => setTitle(e.target.value)}
           disabled={task.isFinished}
           placeholder="Task title"
+        />
+        <input
+          type="text"
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          placeholder={task.type || ""}
         />
         <textarea
           value={description}

@@ -32,6 +32,7 @@ const CreateTask = ({ isOpen, onClose, refreshTasks }) => {
       title: task.title,
       description: task.description,
       isFinished: false,
+      type: task.type
     };
 
     try {
@@ -58,11 +59,20 @@ const CreateTask = ({ isOpen, onClose, refreshTasks }) => {
             required
           />
 
-          <label>Título:</label>
+          <label>Title:</label>
           <input
             type="text"
             name="title"
             value={task.title}
+            onChange={handleChange}
+            required
+          />
+
+        <label>Type:</label>
+          <input
+            type="text"
+            name="type"
+            value={task.type}
             onChange={handleChange}
             required
           />

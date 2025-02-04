@@ -1,3 +1,4 @@
+
 .container {
   display: flex;
   flex-direction: column;
@@ -6,20 +7,21 @@
 }
 
 .task-card {
-  background-color: #f0f0f0;
-  padding: 15px;
-  border-radius: 8px;
-  width: 80%;
+  background-color: #e9f3f3;
+  border-radius: 11px;
+  width: 85%;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   gap: 10px;
   justify-content: space-between;
+  align-items: center; 
+  height: 50px;
+  padding: 10px;
 }
 
 .task-title {
   font-size: 18px;
   font-weight: bold;
-  margin-bottom: 10px;
 }
 
 .button-edit {
@@ -28,7 +30,7 @@
   background-color: #6200ea;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
@@ -38,7 +40,7 @@
   background-color: #26f75a;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 11px;
   cursor: pointer;
 }
 
@@ -49,10 +51,23 @@
 
 .task-type {
   padding: 3px 10px;
-  font-size: 15px;
+  font-size: 13px;
   background-color: #ffb71c;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 11px;
   cursor: pointer;
+}
+
+.grouped-type-edit {
+  display: flex;
+  gap: 30px;
+  padding: 10px;
+}
+
+
+.task-card h3 {
+  margin: 0;
+  flex-grow: 1;
+  text-align: center; /* Centraliza o texto */
 }
