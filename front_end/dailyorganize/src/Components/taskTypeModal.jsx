@@ -17,7 +17,7 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
   const fetchTaskTypes = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:5000/tasktype");
+      const response = await axios.get("http://localhost:5000/taskstype");
       setTaskTypes(response.data);
     } catch (error) {
       console.error("Erro ao buscar task types", error);
@@ -30,7 +30,7 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
     if (!newTaskType.trim()) return;
     try {
       const response = await axios.post(
-        "http://localhost:5000/tasktype",
+        "http://localhost:5000/taskstype",
         { description: newTaskType.trim() },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -49,7 +49,7 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
     if (!editing || !editing.description.trim()) return;
     try {
       const response = await axios.put(
-        `http://localhost:5000/tasktype/${id}`,
+        `http://localhost:5000/taskstype/${id}`,
         { description: editing.description.trim() },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -69,7 +69,7 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
     if (!confirmDelete) return;
 
     try {
-      const response = await axios.delete(`http://localhost:5000/tasktype/${id}`);
+      const response = await axios.delete(`http://localhost:5000/taskstype/${id}`);
       if (response.status === 200) {
         fetchTaskTypes();
       } else {
@@ -113,7 +113,7 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
                   <td>
                     {editing?.id === task.id ? (
                       <input
-                        value={editing.description}
+                        value={editing?.description || ""}
                         onChange={(e) =>
                           setEditing({ ...editing, description: e.target.value })
                         }
