@@ -51,17 +51,18 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
         <h3>Editing the task: {task.Title}</h3>
         <input
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          disabled={task.isFinished}
-          placeholder="Task title"
+          value={type || ""}
+          onChange={(e) => setType(e.target.value)}
+          placeholder="Enter task type"
         />
+        <h4>Type</h4>
         <input
           type="text"
-          value={type}
+          defaultValue={type}
           onChange={(e) => setType(e.target.value)}
-          placeholder={task.type || ""}
+          placeholder="Enter task type"
         />
+        <h4>Description</h4>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}

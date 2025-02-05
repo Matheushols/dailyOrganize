@@ -67,4 +67,8 @@
     gap: 15px;
   }
   
-  
+
+  .edit-task h4 {
+    align-self: flex-start;
+    margin: 0;
+}

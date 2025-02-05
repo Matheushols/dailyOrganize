@@ -3,6 +3,7 @@ import axios from "axios";
 import "../Styles/home.css";
 import EditTask from "../Components/editTask";
 import CreateTask from "../Components/createTask";
+import TaskTypesModal from "../Components/taskTypeModal";
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +11,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isCreatingTaskOpen, setIsCreatingTaskOpen] = useState(false);
+  const [isTaskTypesOpen, setIsTaskTypesOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const fetchUsers = async () => {
@@ -50,19 +52,19 @@ const Home = () => {
                 {task.Title.length > 20 ? `${task.Title.substring(0, 700)}` : task.Title}
               </h2>
               <div className="grouped-type-edit">
-                <h3 className="task-type">
-                {`${task.Type}`}
+                <h3 className="task-type" onClick={() => setIsTaskTypesOpen(true)} style={{ cursor: "pointer" }}>
+                  {`${task.Type}`}
                 </h3>
               
-              <button
-                className="button-edit"
-                onClick={() => {
-                  setSelectedTask(task);
-                  setIsEditTaskOpen(true);
-                }}
-              >
-                Edit the task
-              </button>
+                <button
+                  className="button-edit"
+                  onClick={() => {
+                    setSelectedTask(task);
+                    setIsEditTaskOpen(true);
+                  }}
+                >
+                  Edit the task
+                </button>
               </div>
             </div>
           ))
@@ -70,6 +72,7 @@ const Home = () => {
       </div>
       <EditTask isOpen={isEditTaskOpen} onClose={() => setIsEditTaskOpen(false)} task={selectedTask} refreshTasks={fetchUsers} />
       <CreateTask isOpen={isCreatingTaskOpen} onClose={() => setIsCreatingTaskOpen(false)} refreshTasks={fetchUsers} />
+      <TaskTypesModal isOpen={isTaskTypesOpen} onClose={() => setIsTaskTypesOpen(false)} />
     </div>
   );
 };

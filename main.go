@@ -21,11 +21,11 @@ func main() {
 	router.HandleFunc("/tasks/{id}", server.EditTask).Methods(http.MethodPut)
 	router.HandleFunc("/tasks/{id}", server.DeleteTask).Methods(http.MethodDelete)
 
-	router.HandleFunc("/tasksType", server.CreateTaskType).Methods(http.MethodPost)
-	router.HandleFunc("/tasksType", server.ListTaskType).Methods(http.MethodGet)
-	router.HandleFunc("/tasksType/{id}", server.SearchTaskType).Methods(http.MethodGet)
-	router.HandleFunc("/tasksType/{id}", server.EditTaskType).Methods(http.MethodPut)
-	router.HandleFunc("/tasksType/{id}", server.DeleteTaskType).Methods(http.MethodDelete)
+	router.HandleFunc("/taskstype", server.CreateTaskType).Methods(http.MethodPost)
+	router.HandleFunc("/taskstype", server.ListTaskType).Methods(http.MethodGet)
+	router.HandleFunc("/taskstype/{id}", server.SearchTaskType).Methods(http.MethodGet)
+	router.HandleFunc("/taskstype/{id}", server.EditTaskType).Methods(http.MethodPut)
+	router.HandleFunc("/taskstype/{id}", server.DeleteTaskType).Methods(http.MethodDelete)
 
 	// Adiciona o middleware CORS para permitir requisições de http://localhost:3000
 	corsAllowed := handlers.CORS(
