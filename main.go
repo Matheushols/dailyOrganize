@@ -29,7 +29,7 @@ func main() {
 
 	// Adiciona o middleware CORS para permitir requisições de http://localhost:3000
 	corsAllowed := handlers.CORS(
-		handlers.AllowedOrigins([]string{"http://localhost:3000"}),         // Permite requisições da origem http://localhost:3000
+		handlers.AllowedOrigins([]string{"http://localhost:3001"}),         // Permite requisições da origem http://localhost:3000
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}),  // Permite métodos específicos
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}), // Permite cabeçalhos específicos
 	)

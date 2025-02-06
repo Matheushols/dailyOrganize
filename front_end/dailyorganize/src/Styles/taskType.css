@@ -9,82 +9,158 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 1000;
 }
 
 /* Modal Container */
 .modal-container {
-    background: white;
+    background: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     width: 400px;
     max-width: 90%;
+    animation: fadeIn 0.3s ease-in-out;
+    text-align: center;
 }
 
 /* Modal Header */
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
+.modal-container h2 {
+    font-size: 20px;
+    font-weight: bold;
     margin-bottom: 15px;
 }
 
-.modal-title {
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.modal-close {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-/* Modal Body */
-.modal-body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.task-type-list {
+/* Task List */
+.task-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
-.task-type-item {
+.task-item {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     padding: 8px;
+    background: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 4px;
-    background: #f9f9f9;
+    margin-bottom: 8px;
+    transition: background 0.2s;
+}
+
+.task-item:hover {
+    background: #f1f1f1;
+}
+
+.task-item span {
+    flex-grow: 1;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Task Actions */
+.task-actions {
+    display: flex;
+    gap: 5px;
 }
 
 /* Buttons */
-.button {
+.edit-button,
+.delete-button-task-type{
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.edit-button {
+    background: #007bff;
+    color: white;
+}
+
+.edit-button:hover {
+    background: #0056b3;
+}
+
+.delete-button-task-type {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-button-task-type:hover {
+    background: #a71d2a;
+}
+
+/* Close Button */
+.close-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #6c757d;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.close-button:hover {
+    background: #545b62;
+}
+
+/* Modal Edit */
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.save-button,
+.cancel-button {
     padding: 8px 12px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    transition: background 0.2s;
 }
 
-.button-primary {
-    background: #007bff;
+.save-button {
+    background: #28a745;
     color: white;
 }
 
-.button-danger {
+.save-button:hover {
+    background: #218838;
+}
+
+.cancel-button {
     background: #dc3545;
     color: white;
 }
 
-.button-secondary {
-    background: #6c757d;
-    color: white;
+.cancel-button:hover {
+    background: #a71d2a;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
