@@ -67,6 +67,13 @@
     gap: 5px;
 }
 
+.types-menu {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Buttons */
 .edit-button,
 .delete-button-task-type{
@@ -80,6 +87,26 @@
     cursor: pointer;
     font-size: 14px;
     transition: transform 0.2s ease-in-out;
+}
+
+
+.create-button-task-type{
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s ease-in-out;
+    background: #a6ff6b;
+    color: rgb(131, 131, 131);
+}
+
+.create-button-task-type:hover{
+    color: rgb(235, 235, 235);
 }
 
 .edit-button {
@@ -121,46 +148,44 @@
 .modal-actions {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 10px;
     margin-top: 15px;
+    width: 100%;
 }
 
-.save-button,
-.cancel-button {
-    padding: 8px 12px;
+.save-type-button,
+.cancel-type-button {
+    padding: 8px 0;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: background 0.2s;
+    height: 30px;
+    width: 100px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    display: flex;
+
 }
 
-.save-button {
-    background: #28a745;
+
+.save-type-button {
+    background: #8f4fe7;
     color: white;
 }
 
-.save-button:hover {
-    background: #218838;
+.save-type-button:hover {
+    background: #6200ea;
 }
 
-.cancel-button {
-    background: #dc3545;
+.cancel-type-button {
+    background: #cf3948;
     color: white;
 }
 
-.cancel-button:hover {
+.cancel-type-button:hover {
     background: #a71d2a;
-}
-
-/* Fade-in Animation */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }

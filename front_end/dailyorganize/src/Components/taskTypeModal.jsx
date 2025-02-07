@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaPencilAlt, FaTimes } from "react-icons/fa";
+import { FaPencilAlt } from "react-icons/fa";
 import "../Styles/taskType.css";
-import { FaTrashAlt } from "react-icons/fa";
-
 
 const TaskTypeModal = ({ isOpen, onClose }) => {
   const [taskTypes, setTaskTypes] = useState([]);
   const [editingTask, setEditingTask] = useState(null);
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,6 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
     setLoading(true);
     try {
       const response = await axios.get("http://localhost:5000/taskstype");
-      console.log("Dados da API:", response.data);
       setTaskTypes(response.data);
     } catch (error) {
       console.error("Erro ao buscar task types", error);
@@ -39,11 +38,25 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleCreateTaskType = async () => {
+    if (!newTaskDescription.trim()) return;
+    try {
+      await axios.post("http://localhost:5000/taskstype", {
+        Description: newTaskDescription.trim(),
+      });
+      setNewTaskDescription("");
+      setIsCreating(false);
+      fetchTaskTypes();
+    } catch (error) {
+      console.error("Erro ao criar task type", error);
+    }
+  };
+
   const handleEditTaskType = async () => {
-    if (!editingTask?.description.trim()) return;
+    if (!editingTask?.Description.trim()) return;
     try {
       await axios.put(`http://localhost:5000/taskstype/${editingTask.ID}`, {
-        description: editingTask.description.trim(),
+        Description: editingTask.Description.trim(),
       });
       setEditingTask(null);
       fetchTaskTypes();
@@ -57,7 +70,12 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-container">
-        <h2>Task Types</h2>
+        <div className="types-menu">
+          <h2>Task Types</h2>
+          <button className="create-button-task-type" onClick={() => setIsCreating(true)}>
+            +
+          </button>
+        </div>
         {loading ? (
           <p>Loading...</p>
         ) : (
@@ -70,28 +88,38 @@ const TaskTypeModal = ({ isOpen, onClose }) => {
                     <FaPencilAlt />
                   </button>
                   <button className="delete-button-task-type" onClick={() => handleDeleteTaskType(task.ID)}>
-                  x
+                    x
                   </button>
                 </div>
               </li>
             ))}
           </ul>
         )}
-        <button className="close-button" onClick={onClose}>Fechar</button>
+        <button className="close-button" onClick={onClose}>Close</button>
       </div>
 
-      {editingTask && (
+      {(editingTask || isCreating) && (
         <div className="modal-overlay">
           <div className="modal-container">
-            <h2>Editar Tipo de Tarefa</h2>
+            <h2>{isCreating ? "Creating New Task Type" : "Editing Task Type"}</h2>
             <input
               type="text"
-              value={editingTask.Description}
-              onChange={(e) => setEditingTask({ ...editingTask, Description: e.target.value })}
+              value={isCreating ? newTaskDescription : editingTask.Description}
+              onChange={(e) => {
+                if (isCreating) {
+                  setNewTaskDescription(e.target.value);
+                } else {
+                  setEditingTask({ ...editingTask, Description: e.target.value });
+                }
+              }}
             />
             <div className="modal-actions">
-              <button onClick={handleEditTaskType} className="save-button">Salvar</button>
-              <button onClick={() => setEditingTask(null)} className="cancel-button">Cancelar</button>
+              <button onClick={isCreating ? handleCreateTaskType : handleEditTaskType} className="save-type-button">
+                Save
+              </button>
+              <button onClick={() => { isCreating ? setIsCreating(false) : setEditingTask(null); }} className="cancel-type-button">
+                Cancel
+              </button>
             </div>
           </div>
         </div>
