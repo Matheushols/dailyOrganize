@@ -6,14 +6,37 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [type, setType] = useState("");
+  const [taskTypes, setTaskTypes] = useState([]);
 
   useEffect(() => {
     if (task && !task.isFinished) {
       setTitle(task.Title || "");
       setDescription(task.Description || "");
-      setType(task.type || "");
+      setType(task.type || ""); // Define o tipo inicial da task
     }
   }, [task]);
+
+  useEffect(() => {
+    const fetchTaskTypes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/taskstype");
+        setTaskTypes(response.data);
+
+        // Define o tipo da tarefa ao carregar os tipos disponíveis
+        if (task?.type) {
+          setType(task.type);
+        } else if (response.data.length > 0) {
+          setType(response.data[0].ID); // Define o primeiro tipo caso a task não tenha um tipo
+        }
+      } catch (error) {
+        console.error("Erro ao buscar tipos de tarefas:", error);
+      }
+    };
+
+    if (isOpen) {
+      fetchTaskTypes();
+    }
+  }, [isOpen, task]);
 
   if (!isOpen || !task) return null;
 
@@ -49,19 +72,20 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
     <div className="overlay">
       <div className="edit-task">
         <h3>Editing the task: {task.Title}</h3>
-        <input
-          type="text"
-          value={type || ""}
-          onChange={(e) => setType(e.target.value)}
-          placeholder="Enter task type"
-        />
+
         <h4>Type</h4>
-        <input
-          type="text"
-          defaultValue={type}
+        <select
+          value={type}
           onChange={(e) => setType(e.target.value)}
-          placeholder="Enter task type"
-        />
+          className="task-select"
+        >
+          {taskTypes.map((taskType) => (
+            <option key={taskType.ID} value={taskType.ID}>
+              {taskType.Description}
+            </option>
+          ))}
+        </select>
+
         <h4>Description</h4>
         <textarea
           value={description}
@@ -69,6 +93,7 @@ const EditTask = ({ isOpen, onClose, task, refreshTasks }) => {
           disabled={task.isFinished}
           placeholder="Task description"
         ></textarea>
+
         <div className="editing-task-button">
           <button onClick={handleSave} className="save-button" disabled={task.isFinished}>
             Save
