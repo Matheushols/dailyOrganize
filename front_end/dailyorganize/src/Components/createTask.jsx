@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/createTask.css";
 
@@ -7,7 +7,28 @@ const CreateTask = ({ isOpen, onClose, refreshTasks }) => {
     dataAndHour: "",
     title: "",
     description: "",
+    type: ""
   });
+  const [taskTypes, setTaskTypes] = useState([]);
+
+  useEffect(() => {
+    const fetchTaskTypes = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/taskstype");
+        setTaskTypes(response.data);
+        
+        if (response.data.length > 0) {
+          setTask(prevTask => ({ ...prevTask, type: response.data[0].ID }));
+        }
+      } catch (error) {
+        console.error("Erro ao buscar tipos de tarefas:", error);
+      }
+    };
+
+    if (isOpen) {
+      fetchTaskTypes();
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -68,14 +89,19 @@ const CreateTask = ({ isOpen, onClose, refreshTasks }) => {
             required
           />
 
-        <label>Type:</label>
-          <input
-            type="text"
+          <label>Type:</label>
+          <select
             name="type"
             value={task.type}
             onChange={handleChange}
             required
-          />
+          >
+            {taskTypes.map((taskType) => (
+              <option key={taskType.ID} value={taskType.ID}>
+                {taskType.Description}
+              </option>
+            ))}
+          </select>
 
           <label>Descrição:</label>
           <textarea

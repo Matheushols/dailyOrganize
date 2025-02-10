@@ -40,8 +40,9 @@
 }
 
 .create-task input,
-.create-task textarea {
-  width: 95%;
+.create-task textarea,
+.create-task select {
+  width: 100%;
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
@@ -51,7 +52,8 @@
 }
 
 .create-task input:focus,
-.create-task textarea:focus {
+.create-task textarea:focus,
+.create-task select:focus {
   border: 1px solid #6200ea;
   outline: none;
 }
@@ -59,6 +61,16 @@
 .create-task textarea {
   height: 100px;
   resize: none;
+}
+
+.create-task .type-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.create-task .type-container label {
+  margin-right: 10px;
 }
 
 .create-task-button {
